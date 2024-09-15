@@ -1,0 +1,22 @@
+grammar Calculadora;
+
+// Regras principais
+programa: (comando)+ EOF;
+
+comando: 'imprime' '(' expr ')' ';'        #ComandoImpressao
+       | 'leia' '(' VAR ')' ';'            #ComandoLeitura
+       | VAR '=' expr ';'                  #ComandoAtribuicao
+       ;
+
+// Regras para expressões aritméticas
+expr: expr op=('+'|'-') expr               #AdicaoSubtracao
+    | expr op=('*'|'/') expr               #MultiplicacaoDivisao
+    | '(' expr ')'                         #Parenteses
+    | VAR                                  #Variavel
+    | NUM                                  #Numero
+    ;
+
+// Tokens
+VAR: [a-zA-Z][a-zA-Z0-9]*;                // Variáveis
+NUM: [0-9]+('.'[0-9]+)?;                  // Números reais
+WS: [ \t\r\n]+ -> skip;                   // Ignora espaços em branco
